@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h4 class="h3 ml-3 text-gray-800">Página del Empleado</h4>
+    </div>
+
+    <div class="card border-left-success shadow h-100 py-2">
+        <h6 class="h3 mb-4 ml-2 text-gray-800">Bienvenida Valerie</h6>
+        <h7 class="h3 mb-5  ml-2 text-gray-800">Calificación <label>5/5</label>, ver retroalimentación <a
+                href="">aquí</a></h7>
+        <div class="row">
+            <div class="card-body">
+                <table class="table table-sm able table-sm table-bordered table " style="border-radius: 25px !important;">
+                    <thead >
+                        <tr class="table-active">
+                            <th>Cédula</th>
+                            <th>Nómbre</th>
+                            <th>Cargo</th>
+                            <th>Tipo de contrato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-primary">
+                            <td>1052765098</td>
+                            <td>Valerie Liberty</td>
+                            <td>Jefe de Producción</td>
+                            <td>Indefinido</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

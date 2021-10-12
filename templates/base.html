@@ -43,7 +43,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href={{ url_for("administrar") }}>
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -66,14 +66,14 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Acciones:</h6>
-                        <a class="collapse-item" href="buttons.html">Buscar</a>
-                        <a class="collapse-item" href="cards.html">Crear</a>
-                        <a class="collapse-item" href="cards.html">Editar</a>
-                        <a class="collapse-item" href="cards.html">Eliminar</a>
-
+                        <a class="collapse-item" href={{ url_for("encontrar") }}>Buscar</a>
+                        <a class="collapse-item" href={{ url_for("agregar") }}>Crear</a>
+                        <a class="collapse-item" href={{ url_for("actualizar") }}>Editar</a>
+                        <a class="collapse-item" href={{ url_for("borrar") }}>Eliminar</a>
                     </div>
                 </div>
             </li>
+
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">

@@ -24,4 +24,14 @@ def borrar():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def administrar():
-    return render_template("eliminarEmpleado.html")
+    return render_template("dashboard.html")
+
+@app.route("/retroalimentacion", methods=["GET", "POST"])
+def retroalimentar():
+    return render_template("retroalimentacion.html")
+
+@app.route("/paginaEmpleado", methods=["GET", "POST"])
+def inicio_empleado():
+    return render_template("paginaEmpleado.html")
+
+

@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -8,7 +7,7 @@
 
 <div class="card border-left-primary shadow h-100 py-2">
     <div class="col-xl-12 col-md-6 mb-4">
-        <form>
+        <form method="POST">
 
             <fieldset class="border p-2 rounded">
                 <legend class="w-auto"><small>Información personal</small></legend>
@@ -17,43 +16,42 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="">Nombre(s)</label>
-                            <input type="text" name="nombre" id="txtvalue" class="form-control">
+                            {{form.nombre(class_="form-control",minlength=2, maxlength=25) }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="apartamento">Apellidos</label>
-                            <input type="text" name="apellidos" id="txtvalue" class="form-control">
+                            {{form.apellidos(class_="form-control",minlength=5, maxlength=50) }}
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="">Dirección</label>
-                            <input type="text" name="nombres" id="txtvalue" class="form-control">
+                            {{form.direccion(class_="form-control",minlength=8, maxlength=50) }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="fecha_inicio">Fecha Nac.</label>
-                            <input type="date" name="fecha_nac" required value="fecha_nac" class="form-control"
-                                placeholder="Stock..." id="fechaInicialAuto" onchange="fechaAuto()" required>
+                            {{form.fechaNac(class_="form-control",minlength=8) }}
+
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj1">
                             <label for="doc_no">Doc. No</label>
-                            <input required type="text" value="" name="doc_no" class="form-control" id="pagoInput"
-                                placeholder="Ingrese el numero del documento....." readonly=»readonly»>
+                            {{form.numDocId(class_="form-control", min=999999, placeholder="Escriba aquí su número de documento") }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="correo">Correo</label>
-                            <input type="email" name="nombres" id="txtvalue" class="form-control" disabled>
+                            {{form.email(class_="form-control") }}
                         </div>
                     </div>
 
@@ -61,12 +59,7 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label>Genero</label>
-                            <select name="genero" class="form-control" id="genero" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione su genero---</option>
-                                <option value="masculino">Masculino</option>
-                                <option value="femenino">Femenino</option>
-                                <option value="Completo">Otro</option>
-                            </select>
+                            {{form.genero(class_="form-control") }}
                         </div>
                     </div>
 
@@ -74,40 +67,35 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label>Rol</label>
-                            <select name="rol" class="form-control" id="rol" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione su rol---</option>
-                                <option value="super_administrador">Super Administrador"</option>
-                                <option value="Administrador">Administrador</option>
-                                <option value="Usuario Final">Usuario Final</option>
-                            </select>
+                            {{form.rol(class_="form-control") }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="">Usuario</label>
-                            <input type="text" name="nombres" id="txtvalue" class="form-control" disabled>
+                            {{form.usuario(class_="form-control",minlength=4, maxlength=15) }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
-                            <label for="apartamento">Password</label>
-                            <input type="text" name="apellidos" id="txtvalue" class="form-control" disabled>
+                            <label for="">Contraseña</label>
+                            {{form.clave(class_="form-control",minlength=8, maxlength=15) }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
-                            <label for="apartamento">Confirme su password</label>
-                            <input type="text" name="apellidos" id="txtvalue" class="form-control" disabled>
+                            <label for="">Confirme su contraseña</label>
+                            {{form.claveConfirm(class_="form-control",minlength=8, maxlength=15) }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
-                            <label for="imagen">Foto</label>
-                            <input type="file" name="imagen" class="form-control" accept="image/*">
+                            <label for="foto">Foto</label>
+                            {{form.foto(class_="form-control") }}
                         </div>
                     </div>
 
@@ -120,61 +108,42 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="fecha_ingreso">Fecha Ingreso</label>
-                            <input type="date" name="fecha_ingreso" required value="fecha_nac" class="form-control"
-                                id="fecha_ingreso" onchange="fechaAuto()" required>
+                            {{form.fechaIngreso(class_="form-control",minlength=8) }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label for="contrato">Tipo de contrato</label>
-                            <select name="genero" class="form-control" id="contrato" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione su tipo de
-                                    contrato---</option>
-                                <option value="indefinido">Indefinido</option>
-                                <option value="Temporal">Temporal</option>
-                                <option value="Otro">Otro</option>
-                            </select>
+                            {{form.tipoContrato(class_="form-control") }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="fecha_salida">Fecha salida</label>
-                            <input type="date" name="fecha_sal" required value="fecha_sal" class="form-control"
-                                id="fecha_salida" onchange="fechaAuto()" required>
+                            {{form.fechaSalida(class_="form-control",minlength=8) }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label for="cargo">Cargo</label>
-                            <select name="cargo" class="form-control" id="contrato" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione su cargo---</option>
-                                <option value="">Gerente de ventas</option>
-                                <option value="">Jefe de compras</option>
-                                <option value="">Otro</option>
-                            </select>
+                            {{form.cargo(class_="form-control") }}
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="salario">Salario</label>
-                            <input type="text" name="salario" id="salario" class="form-control">
+                            {{form.numDocId(class_="form-control", min=850000) }}                        
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label for="cargo">Dependencia</label>
-                            <select name="cargo" class="form-control" id="contrato" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione dependencia---
-                                </option>
-                                <option value="">Ventas</option>
-                                <option value="">Sistemas</option>
-                                <option value="">Talento humano</option>
-                            </select>
+                            {{form.dependencia(class_="form-control") }}
                         </div>
                     </div>
 
@@ -184,7 +153,7 @@
             <br>
             <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 ">
                 <div class="form-group">
-                    <button class="btn btn-success" type="submit">Guardar</button>
+                    {{ form.submit(class_="btn btn-success") }}
                     <button class="btn btn-warning" type="submit">limpiar</button>
                     <button class="btn btn-danger" type="reset">Cancelar</button>
                 </div>

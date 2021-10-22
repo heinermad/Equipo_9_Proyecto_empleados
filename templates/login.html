@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SistEmp - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link  rel="stylesheet" type="text/css " href={{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css')}}>
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet"  href={{ url_for('static', filename='css/sb-admin-2.min.css')}}>
+
+</head>
+
+{% block content %}
+<body>
+
+
+
+
+<div class="card border-left-primary shadow h-100 py-2">
+    <div class="col-xl-12 col-md-6 mb-4">
+        <form method="POST" action="/login">
+            {{ form.csrf_token }}
+            <fieldset class="border p-2 rounded">
+                <legend class="w-auto"><small>Iniciar sesión</small></legend>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                        <div class="form-group" id="obj2">
+                            <label>Nombre de usuario</label>
+                            {{ form.hidden_tag() }}
+                            {{ form.username(class_="form-control") }}
+                            
+                        </div>
+                        
+                        <div class="form-group" id="obj2">
+                            <label>Contraseña</label>
+                            {{ form.password(class_="form-control") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 ">
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <br>
+
+</body>
+
+{% endblock %}

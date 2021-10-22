@@ -7,11 +7,21 @@
 
 <div class="card border-left-primary shadow h-100 py-2">
     <div class="col-xl-12 col-md-6 mb-4">
-        <form method="POST">
-
+        <form method="POST" action = "/crear"> 
+            {{ form.csrf_token }}
+              
             <fieldset class="border p-2 rounded">
+            {{ form.csrf_token }}
+
                 <legend class="w-auto"><small>Información personal</small></legend>
                 <div class="row">
+
+                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                        <div class="form-group" id="obj1">
+                            <label for="doc_no">Doc. No</label>
+                            {{form.numDocId(class_="form-control", min=999999, placeholder="Escriba aquí su número de documento") }}
+                        </div>
+                    </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
@@ -22,7 +32,7 @@
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
-                            <label for="apartamento">Apellidos</label>
+                            <label for="">Apellidos</label>
                             {{form.apellidos(class_="form-control",minlength=5, maxlength=50) }}
                         </div>
                     </div>
@@ -41,13 +51,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                        <div class="form-group" id="obj1">
-                            <label for="doc_no">Doc. No</label>
-                            {{form.numDocId(class_="form-control", min=999999, placeholder="Escriba aquí su número de documento") }}
-                        </div>
-                    </div>
-
+                    
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="correo">Correo</label>
@@ -85,25 +89,9 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                        <div class="form-group">
-                            <label for="">Confirme su contraseña</label>
-                            {{form.claveConfirm(class_="form-control",minlength=8, maxlength=15) }}
-                        </div>
-                    </div>
+                   
 
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                        <div class="form-group">
-                            <label for="foto">Foto</label>
-                            {{form.foto(class_="form-control") }}
-                        </div>
-                    </div>
-
-                </div>
-            </fieldset>
-            <fieldset class="border p-2 rounded">
-                <legend class="w-auto"><small>Información del contrato</small></legend>
-                <div class="row">
+                   
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
@@ -118,14 +106,14 @@
                             {{form.tipoContrato(class_="form-control") }}
                         </div>
                     </div>
-
+                    
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="fecha_salida">Fecha salida</label>
                             {{form.fechaSalida(class_="form-control",minlength=8) }}
                         </div>
                     </div>
-
+                    
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label for="cargo">Cargo</label>
@@ -136,28 +124,19 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="salario">Salario</label>
-                            {{form.numDocId(class_="form-control", min=850000) }}                        
+                            {{form.salario(class_="form-control", min=850000) }}                        
                         </div>
                     </div>
-
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                        <div class="form-group" id="obj2">
-                            <label for="cargo">Dependencia</label>
-                            {{form.dependencia(class_="form-control") }}
-                        </div>
-                    </div>
-
                 </div>
-
+                <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 ">
+                        <div class="form-group">
+                          <button type="submit" class="btn btn-success">Guardar</button>
+                          <button class="btn btn-danger" type="reset">Cancelar</button>
+                       </div>
+                </div>
             </fieldset>
-            <br>
-            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 ">
-                <div class="form-group">
-                    {{ form.submit(class_="btn btn-success") }}
-                    <button class="btn btn-warning" type="submit">limpiar</button>
-                    <button class="btn btn-danger" type="reset">Cancelar</button>
-                </div>
-            </div>
+            
+            
         </form>
     </div>
 </div>

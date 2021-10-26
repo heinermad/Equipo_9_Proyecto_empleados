@@ -1,25 +1,29 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content%}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Editar Empleado</h1>
 </div>
+
 <div class="card border-left-primary shadow h-100 py-2">
-    <div class="col-xl-12 col-md-6 mb-4">
-        <form>
+    <div class="col-lg-12 col-xl-12 col-md-12 mb-4">
+        <form action="/editar" method="POST">
             <fieldset class="border p-2 rounded">
                 <legend class="w-auto"><small>Busqueda por id</small></legend>
                 <div class="input-group">
 
                     <input type="text" class="form-control bg-light border-0 small col-xl-2 col-md-6 mb-12"
-                        placeholder="Search for id..." aria-label="Search" aria-describedby="basic-addon2">
+                        placeholder="Search for id..." aria-label="Search" aria-describedby="basic-addon2" name="idEmp">
                     <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
+                        <button class="btn btn-primary" type="submit">
                             <i class="fas fa-search fa-sm"></i>
                         </button>
                     </div>
                 </div>
             </fieldset>
+        </form>
+
+        <form action="/actualizarEmp" method="POST">
 
             <fieldset class="border p-2 rounded">
                 <legend class="w-auto"><small>Información personal</small></legend>
@@ -28,43 +32,38 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="">Nombre(s)</label>
-                            <input type="text" name="nombre" id="txtvalue" class="form-control">
+                            <input type="text" name="nombre" id="txtvalue" class="form-control" value="{{ eNombre }}">
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
-                            <label for="apartamento">Apellidos</label>
-                            <input type="text" name="apellidos" id="txtvalue" class="form-control">
+                            <label for="">Apellidos</label>
+                            <input type="text" name="apellidos" id="txtvalue" class="form-control"
+                                value=" {{eApellido}}">
                         </div>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="">Dirección</label>
-                            <input type="text" name="nombres" id="txtvalue" class="form-control">
+                            <input type="text" name="direccion" id="txtvalue" class="form-control"
+                                value="{{eDireccion}}">
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="fecha_inicio">Fecha Nac.</label>
-                            <input type="date" name="fecha_nac" required value="fecha_nac" class="form-control"
-                                placeholder="Stock..." id="fechaInicialAuto" onchange="fechaAuto()" required>
+                            <input type="date" name="fecha_nac" class="form-control" placeholder="Stock..."
+                                id="fechaInicialAuto" value="{{ fNac }}">
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                        <div class="form-group" id="obj1">
-                            <label for="doc_no">Doc. No</label>
-                            <input required type="text" value="" name="doc_no" class="form-control" id="pagoInput"
-                                placeholder="Ingrese el numero del documento.....">
-                        </div>
-                    </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="correo">Correo</label>
-                            <input type="email" name="nombres" id="txtvalue" class="form-control">
+                            <input type="email" name="correo" id="txtvalue" class="form-control" value="{{ eCorreo }}">
                         </div>
                     </div>
 
@@ -72,11 +71,18 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label>Genero</label>
-                            <select name="genero" class="form-control" id="genero" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione su genero---</option>
-                                <option value="masculino">Masculino</option>
-                                <option value="femenino">Femenino</option>
-                                <option value="Completo">Otro</option>
+                            <select name="genero" class="form-control" id="" onchange="pagolselect()">
+                                <option id="" value="{{ eGenero }}">{{ eGenero }}</option>
+                                {% if eGenero== 'Masculino' %}
+                                <option value=" 'Femenino' ">Femenino </option>
+                                {% elif  eGenero== 'Femenino' %}
+                                <option value="'Masculino'">Masculino</option>
+                                {% else %}
+                                         {% for i in gen %}
+                                            <option value="{{ i }}">{{ i }}</option>
+                                         {% endfor %}
+                                {% endif %}
+
                             </select>
                         </div>
                     </div>
@@ -86,10 +92,12 @@
                         <div class="form-group" id="obj2">
                             <label>Rol</label>
                             <select name="rol" class="form-control" id="rol" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione su rol---</option>
-                                <option value="super_administrador">Super Administrador"</option>
-                                <option value="Administrador">Administrador</option>
-                                <option value="Usuario Final">Usuario Final</option>
+                                <option id="porDefecto" value="{{ uRol }}">{{ nomRol }}</option>
+                                {% for i , v in roles %}
+                                  {% if v != nomRol %}
+                                     <option value="{{ i+1 }}">{{ v }}</option>
+                                  {% endif %}
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -97,31 +105,40 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="">Usuario</label>
-                            <input type="text" name="nombres" id="txtvalue" class="form-control">
+                            <input type="text" name="usuario" id="txtvalue" class="form-control" value="{{ nomUsu  }}">
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="apartamento">Password</label>
-                            <input type="text" name="apellidos" id="txtvalue" class="form-control">
+                            <input type="text" name="clave" id="txtvalue" class="form-control"
+                                value="{{ claveUsu  }}">
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                    <div class="col-lg-0 col-sm-0 col-md-0 col-xs-0">
                         <div class="form-group">
-                            <label for="apartamento">Confirme su password</label>
-                            <input type="text" name="apellidos" id="txtvalue" class="form-control">
+                           
+                            <input type="hidden" name="doc" id="txtvalue" class="form-control"
+                                value="{{ docNum  }}">
                         </div>
                     </div>
-
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                    <div class="col-lg-0 col-sm-0 col-md-0 col-xs-0">
                         <div class="form-group">
-                            <label for="imagen">Foto</label>
-                            <input type="file" name="imagen" class="form-control" accept="image/*">
+                            
+                            <input type="hidden" name="rolOld" id="txtvalue" class="form-control"
+                                value="{{ uRol }}">
                         </div>
                     </div>
 
+                    <div class="col-lg-0 col-sm-0 col-md-0 col-xs-0">
+                        <div class="form-group">
+                            
+                            <input type="hidden" name="cargOld" id="txtvalue" class="form-control"
+                                value="{{ cargoId }}">
+                        </div>
+                    </div>
                 </div>
             </fieldset>
             <fieldset class="border p-2 rounded">
@@ -131,19 +148,45 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="fecha_ingreso">Fecha Ingreso</label>
-                            <input type="date" name="fecha_ingreso" required value="fecha_nac" class="form-control"
-                                id="fecha_ingreso" onchange="fechaAuto()" required>
+                            <input type="date" name="fecha_ingreso" class="form-control" placeholder="Stock..."
+                              id="fechaInicialAuto" value="{{ fechaIngreso }}">
+
+                            </input>
                         </div>
                     </div>
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label for="contrato">Tipo de contrato</label>
-                            <select name="genero" class="form-control" id="contrato" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione su tipo de contrato---</option>
-                                <option value="indefinido">Indefinido</option>
-                                <option value="Temporal">Temporal</option>
-                                <option value="Otro">Otro</option>
+                            <select name="tipo_contrato" class="form-control" id="contrato" onchange="pagolselect()">
+                                <option  id="porDefecto" value=" {{ cTipoContrato }}">{{ cTipoContrato }}
+                                </option>
+                                {% for con in p %}
+                                  {% if cTipoContrato != con %}
+                                   <option value="{{ con }}">{{ con }}</option>
+                                  {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                        <div class="form-group" id="obj2">
+                            <label for="contrato">Estado</label>
+                            <select name="estado" class="form-control" id="contrato" onchange="pagolselect()">
+                                <option id="porDefecto" value="{{ cEstado }}">{{ cEstado }}</option>
+                                {% if cEstado == 'Inactivo' %}
+                                  <option value="'Activo'"> Activo</option>
+                                {% elif cEstado == 'Activo' %}
+                                   <option value="'Inactivo'"> Inactivo</option>
+                                {% else %}
+                                      {% for e in est %}
+                                          <option value="{{ e }}">{{ e }}</option>
+                                       {% endfor %}
+                                {% endif %}
+
+
+
                             </select>
                         </div>
                     </div>
@@ -151,19 +194,23 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="fecha_salida">Fecha salida</label>
-                            <input type="date" name="fecha_sal" required value="fecha_sal" class="form-control"
-                                id="fecha_salida" onchange="fechaAuto()" required>
+                            <input type="date" name="{{ fechaSalida }}" class="form-control" id="fecha_salida"
+                                value=" {{ fechaSalida }}">
                         </div>
                     </div>
+
+
 
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label for="cargo">Cargo</label>
                             <select name="cargo" class="form-control" id="contrato" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione su cargo---</option>
-                                <option value="">Gerente de ventas</option>
-                                <option value="">Jefe de compras</option>
-                                <option value="">Otro</option>
+                                <option value="{{ cargoId }} " id="porDefecto">{{ cargoNom }}</option>
+                                {% for i in cargos1 %}
+                                    {% if i.nombre != cNombre %}
+                                       <option value="{{ i.id }}">{{ i.nombre }}</option>
+                                    {% endif %}
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -171,21 +218,11 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="salario">Salario</label>
-                            <input type="text" name="salario" id="salario" class="form-control">
+                            <input type="text" name="salario" id="salario" class="form-control" value="{{ cSalario }}">
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                        <div class="form-group" id="obj2">
-                            <label for="cargo">Dependencia</label>
-                            <select name="cargo" class="form-control" id="contrato" onchange="pagolselect()">
-                                <option value="" id="porDefecto">---Seleccione dependencia---</option>
-                                <option value="">Ventas</option>
-                                <option value="">Sistemas</option>
-                                <option value="">Talento humano</option>
-                            </select>
-                        </div>
-                    </div>
+
 
                 </div>
 
@@ -194,11 +231,14 @@
             <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 ">
                 <div class="form-group">
                     <button class="btn btn-success" type="submit">Editar</button>
-                    <button class="btn btn-warning" type="submit">limpiar</button>
+                    <button class="btn btn-warning" type="">limpiar</button>
                     <button class="btn btn-danger" type="reset">Cancelar</button>
                 </div>
             </div>
+
         </form>
+
+
     </div>
 </div>
 

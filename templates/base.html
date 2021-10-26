@@ -19,7 +19,9 @@
 
     <!-- Custom styles for this template-->
     <link rel="stylesheet"  href={{ url_for('static', filename='css/sb-admin-2.min.css')}}>
-
+    <!-- style for dataTable -->
+    <link rel="stylesheet" href={{ url_for('static', filename='css/dataTables.min.css') }}>
+    
 </head>
 
 <body id="page-top">
@@ -369,7 +371,8 @@
     <!-- Bootstrap core JavaScript-->
     <script   src={{ url_for('static', filename='vendor/jquery/jquery.min.js')}}></script>
     <script   src={{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}></script>
-
+    <!-- script for dataTable -->
+    <script src={{ url_for('static', filename='js/dataTables.min.js') }}></script>
     <!-- Core plugin JavaScript-->
     <script src={{ url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js')}}></script>
 
@@ -382,6 +385,7 @@
     <!-- Page level custom scripts -->
     <script  src={{ url_for('static', filename='js/demo/chart-area-demo.js')}}></script>
     <script  src={{ url_for('static', filename='js/demo/chart-pie-demo.js')}}></script>
+    <script src={{ url_for('static', filename='js/scripts.min.js') }}></script>
 
 </body>
 

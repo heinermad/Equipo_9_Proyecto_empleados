@@ -1,90 +1,104 @@
-  {% extends "base.html" %}
+{% extends "base.html" %}
 
-  {% block content %}
+{% block content %}
 
-      
-      <div class="d-sm-flex align-items-center justify-content-between mb-4">
-              <h1 class="h3 mb-0 text-gray-800">Búsqueda empleado</h1>
-                        
-       </div>
 
-      <div class="card border-left-success shadow h-100 py-2">
-        
-       
-                <div class="row">
-                            <div class="card-body">
-                                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                     <a href="{{ url_for("agregar") }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                      class="fas fa-user-plus fa-sm text-white-50"></i> Nuevo Empleado</a>
-                                      <div class="input-group col-xl-4">
-                                          <input type="text" class="form-control bg-light border-0 small" placeholder="Filtrar..."
-                                           aria-label="Search" aria-describedby="basic-addon2">
-                                           <div class="input-group-append">
-                                               <button class="btn btn-primary" type="button">
-                                                 <i class="fas fa-search fa-sm"></i>
-                                               </button>
-                                          </div>
-                                      </div>
-                                 </div>
-                                <table class="table table-sm able table-sm table-bordered table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Edad</th>
-                                            <th scope="col">Cargo</th>
-                                            <th scope="col">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Giacomo Guilizzoni</td>
-                                            <td>36</td>
-                                            <td>Fundador y CEO</td>
-                                            <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt" style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp &nbsp</i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Marco Botton</td>
-                                            <td>34</td>
-                                            <td>Ingeniero de sistemas</td>
-                                            <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt" style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp &nbsp</i></td>
-                                        </tr>
-                                        <tr>
-                                           <td>Mariah Maclachian</td>
-                                            <td>37</td>
-                                            <td>Contador</td>
-                                            <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt" style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp &nbsp</i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Valery Liberty</td>
-                                            <td>25</td>
-                                            <td>Jefe de Producción </td>
-                                            <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt" style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp &nbsp</i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Guido Jack Guilizzoni</td>
-                                            <td>22</td>
-                                            <td><a href="">Servicios Generales</a></td>
-                                            <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt" style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp &nbsp</i></td>
-                                        </tr>
-                                        
-                                    </tbody>
-                                </table>
-                                <nav aria-label="...">
-                                    <ul class="pagination">
-                                      <li class="page-item">
-                                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
-                                      </li>
-                                      <li class="page-item  active"><a class="page-link" href="#">1</a></li>
-                                      <li class="page-item disabled">
-                                        <a class="page-link" href="#">2 <span class="sr-only">(actual)</span></a>
-                                      </li>
-                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                      <li class="page-item">
-                                        <a class="page-link" href="#">Siguiente</a>
-                                      </li>
-                                    </ul>
-                                  </nav>
-                            </div>
-                </div>
-       </div>
-  {% endblock %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Búsqueda empleado</h1>
+
+</div>
+
+<div class="card border-left-success shadow h-100 py-2">
+    <div class="row">
+        <div class="card-body">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <a href="{{ url_for("agregar") }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        class="fas fa-user-plus fa-sm text-white-50"></i> Nuevo Empleado</a>
+                <!-- <div class="input-group col-xl-4">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Filtrar..."
+                        aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
+                </div> -->
+            </div>
+            <table id="tableEmploye" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">nombre</th>
+                        <th scope="col">apellido</th>
+                        <th scope="col">direccion</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">fechaNc</th>
+                        <th scope="col">genero</th>
+                        <th scope="col">foto</th>
+                        <th scope="col">idCargo</th>
+                        <!-- <th scope="col">Acciones</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr>
+                        <td>Giacomo Guilizzoni</td>
+                        <td>36</td>
+                        <td>Fundador y CEO</td>
+                        <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt"
+                                style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp
+                                &nbsp</i></td>
+                    </tr>
+                    <tr>
+                        <td>Marco Botton</td>
+                        <td>34</td>
+                        <td>Ingeniero de sistemas</td>
+                        <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt"
+                                style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp
+                                &nbsp</i></td>
+                    </tr>
+                    <tr>
+                        <td>Mariah Maclachian</td>
+                        <td>37</td>
+                        <td>Contador</td>
+                        <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt"
+                                style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp
+                                &nbsp</i></td>
+                    </tr>
+                    <tr>
+                        <td>Valery Liberty</td>
+                        <td>25</td>
+                        <td>Jefe de Producción </td>
+                        <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt"
+                                style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp
+                                &nbsp</i></td>
+                    </tr>
+                    <tr>
+                        <td>Guido Jack Guilizzoni</td>
+                        <td>22</td>
+                        <td><a href="">Servicios Generales</a></td>
+                        <td><i class="fas fa-eye " style="color:blue">&nbsp &nbsp</i> <i class="fas fa-pencil-alt"
+                                style="color:green">&nbsp &nbsp</i><i class="fas fa-trash-alt" style="color:red"> &nbsp
+                                &nbsp</i></td>
+                    </tr> -->
+
+                </tbody>
+            </table>
+            <!-- <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                    </li>
+                    <li class="page-item  active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">2 <span class="sr-only">(actual)</span></a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Siguiente</a>
+                    </li>
+                </ul>
+            </nav> -->
+        </div>
+    </div>
+</div>
+{% endblock %}

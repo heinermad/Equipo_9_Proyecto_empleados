@@ -1,4 +1,4 @@
-from flask import Flask, app, render_template
+from flask import Flask, app, json, render_template, sessions
 from flask.helpers import url_for
 from werkzeug.utils import redirect
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,6 +22,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 #Base = declarative_base()
+# Section for class ORM DB
 class Rol(UserMixin, db.Model):
     __tablename__ = 'Rol'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -148,6 +149,12 @@ def agregar():
 @login_required
 def encontrar():
     return render_template("buscarEmpleados.html", name=current_user.nombre)
+
+app.route("/search", methods=["GET", "POST"])
+@login_required
+def search():
+    employe = db.session.query(Empleado)
+    return json.dumps(employe)
 
 @app.route("/editar", methods=["GET", "POST"])
 @login_required

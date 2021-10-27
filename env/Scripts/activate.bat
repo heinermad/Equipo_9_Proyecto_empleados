@@ -1,6 +1,6 @@
 @echo off
 
-set "VIRTUAL_ENV=C:\xampp\htdocs\Repo_local\Equipo_9_Proyecto_empleados\env"
+set "VIRTUAL_ENV=C:\Users\Heiner-PC\Desktop\Mision TIC\Ciclo_3_Flask\flask projects\update1\Equipo_9_Proyecto_empleados\env"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"
@@ -16,7 +16,6 @@ if not defined VIRTUAL_ENV_DISABLE_PROMPT (
     set "ENV_PROMPT="
     if NOT DEFINED ENV_PROMPT (
         for %%d in ("%VIRTUAL_ENV%") do set "ENV_PROMPT=(%%~nxd) "
-    )
     )
     set "PROMPT=%ENV_PROMPT%%PROMPT%"
 )

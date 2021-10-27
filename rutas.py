@@ -1,6 +1,8 @@
-from flask import Flask, app, json, render_template, sessions
+from flask import Flask, app, json, jsonify, render_template, sessions
 from flask.helpers import url_for
+from sqlalchemy.sql.expression import true
 from werkzeug.utils import redirect
+from flask_marshmallow import Marshmallow
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 #from sqlalchemy.ext.declarative import declarative_base
@@ -9,6 +11,7 @@ from sqlalchemy.orm import relationship
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from formularios import LoginForm, FormAgregar, FormRol
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Thisissupposedtobesecret!'
 
@@ -16,6 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///empleados.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -48,7 +52,7 @@ class Empleado(UserMixin, db.Model):
     apellido = Column(String)
     direccion = Column(String)
     fechaNac = Column(String)
-    correo = Column(String) 
+    correo = Column(String)
     genero = Column(String)
     foto = Column(String)
     idCargo = Column(Integer,ForeignKey("Cargo.id"))
@@ -74,6 +78,22 @@ class Usuario(UserMixin, db.Model):
     rol= relationship("Rol", foreign_keys=[idRol])
     empleado= relationship("Empleado",foreign_keys=[idEmpleado])
 
+# Schema to handle queries from Empleados
+class EmployeSchema(ma.Schema):
+    class Meta:
+        fields = (
+            'id',
+            'nombre',
+            'apellido',
+            'direccion',
+            'fechaNac',
+            'correo',
+            'genero'
+        )
+Employe_Schema = EmployeSchema()
+Employees_Schema = EmployeSchema(many=True)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
@@ -81,7 +101,7 @@ def load_user(user_id):
 @app.route('/', methods=["GET", "POST"])
 def index():
     return redirect(url_for('login'))
-    
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -112,11 +132,11 @@ def agregar():
     if form.validate_on_submit():
 
         nuevoEmpleado = Empleado(
-        id=form.numDocId.data, 
-        nombre = form.nombre.data, 
-        apellido = form.apellidos.data, 
-        direccion = form.direccion.data, 
-        fechaNac = form.fechaNac.data, 
+        id=form.numDocId.data,
+        nombre = form.nombre.data,
+        apellido = form.apellidos.data,
+        direccion = form.direccion.data,
+        fechaNac = form.fechaNac.data,
         correo = form.email.data,
         genero = form.genero.data,
         #genero = dict(form.genero.choices).get(form.genero.data),#recuperar los valores que el usuario ve en el select
@@ -127,13 +147,13 @@ def agregar():
         nuevoContrato = Contrato(
             tipoContrato = form.tipoContrato.data,
             estado = 'activo',
-            fechaIngreso = form.fechaIngreso.data, 
+            fechaIngreso = form.fechaIngreso.data,
             fechaSalida = '09/10/2022',
             idEmpleado = form.numDocId.data
         )
 
         nuevoUsuario = Usuario(
-        nombre=form.usuario.data, 
+        nombre=form.usuario.data,
         clave = generate_password_hash(form.clave.data, method='sha256'),
         idEmpleado = form.numDocId.data,
         idRol=form.rol.data,
@@ -150,11 +170,12 @@ def agregar():
 def encontrar():
     return render_template("buscarEmpleados.html", name=current_user.nombre)
 
-app.route("/search", methods=["GET", "POST"])
+@app.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
-    employe = db.session.query(Empleado)
-    return json.dumps(employe)
+    data = db.session.query(Empleado).all()
+    result = Employees_Schema.dump(data)
+    return jsonify({'data':result})
 
 @app.route("/editar", methods=["GET", "POST"])
 @login_required
@@ -188,7 +209,10 @@ def rola():
     if form.validate_on_submit():
         nuevoRol = Rol(nombre=form.nombre.data)
         db.session.add(nuevoRol)
-        db.session.commit() 
+        db.session.commit()
         return redirect(url_for('rola'))
     return render_template('rol.html', form=form, name=current_user.nombre)
 
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

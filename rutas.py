@@ -1,6 +1,6 @@
 from flask import Flask, app, json, jsonify, render_template, sessions
 from flask.helpers import url_for
-from sqlalchemy.sql.expression import true
+from sqlalchemy.sql.expression import false, true
 from werkzeug.utils import redirect
 from flask_marshmallow import Marshmallow
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -170,12 +170,29 @@ def agregar():
 def encontrar():
     return render_template("buscarEmpleados.html", name=current_user.nombre)
 
+# FUNCTIONAL CRUD ROUTES
 @app.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
     data = db.session.query(Empleado).all()
     result = Employees_Schema.dump(data)
     return jsonify({'data':result})
+
+@app.route("/delete/<id>", methods=["DELETE"])
+@login_required
+def delete(id):
+    try:
+        if id != "":
+            data = db.session.query(Empleado).get(id)
+            db.session.delete(data)
+            db.session.commit()
+            message = "El empleado se elimino exitosamente"
+        else:
+            message = "Ingrese un id valido para eliminar"
+        return message
+    except:
+        print("Hubo un error")
+
 
 @app.route("/editar", methods=["GET", "POST"])
 @login_required

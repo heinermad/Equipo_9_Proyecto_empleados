@@ -39,7 +39,7 @@
                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group">
                             <label for="">Apellidos</label>
-                            <input type="text" name="apellidos" id="txtvalue" class="form-control"
+                            <input type="text" name="apellidos" id="" class="form-control"
                                 value=" {{eApellido}}">
                         </div>
                     </div>
@@ -139,6 +139,13 @@
                                 value="{{ cargoId }}">
                         </div>
                     </div>
+
+                    <div class="col-lg-0 col-sm-0 col-md-0 col-xs-0">
+                        <div class="form-group">
+                            <input type="hidden" name="claveOld" id="txtvalue" class="form-control"
+                                value="{{ claveUsu  }}">
+                        </div>
+                    </div>
                 </div>
             </fieldset>
             <fieldset class="border p-2 rounded">
@@ -176,9 +183,9 @@
                             <select name="estado" class="form-control" id="contrato" onchange="pagolselect()">
                                 <option id="porDefecto" value="{{ cEstado }}">{{ cEstado }}</option>
                                 {% if cEstado == 'Inactivo' %}
-                                  <option value="'Activo'"> Activo</option>
+                                  <option value="{{ 'Activo' }}"> Activo</option>
                                 {% elif cEstado == 'Activo' %}
-                                   <option value="'Inactivo'"> Inactivo</option>
+                                   <option value="{{ 'Inactivo' }}"> Inactivo</option>
                                 {% else %}
                                       {% for e in est %}
                                           <option value="{{ e }}">{{ e }}</option>

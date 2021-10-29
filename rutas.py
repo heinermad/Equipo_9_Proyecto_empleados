@@ -1,3 +1,4 @@
+from operator import and_
 from flask import Flask, app, json, jsonify, render_template, sessions
 from flask.helpers import url_for
 from sqlalchemy.sql.expression import false, true
@@ -10,7 +11,7 @@ from sqlalchemy import Integer, ForeignKey, String, Float, Column
 from sqlalchemy.orm import relationship
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from formularios import LoginForm, FormAgregar, FormRol
-
+from flask import request
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Thisissupposedtobesecret!'
@@ -104,15 +105,21 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+     
     form = LoginForm()
-
+    nom1234=form.username.data
     if form.validate_on_submit():
-        user = Usuario.query.filter_by(nombre=form.username.data).first()
-        if user:
-            if check_password_hash(user.clave, form.password.data):
+        user1 = db.session.query(Usuario).all()
+        for  resultUsu in user1:
+            if nom1234==resultUsu.nombre :
+               user=resultUsu
+            
+        if nom1234:
+           if check_password_hash(user.clave, form.password.data):
                 login_user(user)
                 return redirect(url_for('inicio'))
         return '<h1>Invalid username or password</h1>'
+        
     return render_template('login.html', form=form)
 
 @app.route('/dashboard')
@@ -129,6 +136,8 @@ def logout():
 @app.route('/crear', methods=['GET', 'POST'])
 def agregar():
     form = FormAgregar()
+    form = FormAgregar()
+    cargos=db.session.query(Cargo).all()
     if form.validate_on_submit():
 
         nuevoEmpleado = Empleado(
@@ -140,15 +149,15 @@ def agregar():
         correo = form.email.data,
         genero = form.genero.data,
         #genero = dict(form.genero.choices).get(form.genero.data),#recuperar los valores que el usuario ve en el select
-        foto = "hjfjdahkjfh",
-        idCargo = form.cargo.data
+        foto = " ",
+        idCargo = request.form.get("cargo")
         )
 
         nuevoContrato = Contrato(
             tipoContrato = form.tipoContrato.data,
             estado = 'activo',
             fechaIngreso = form.fechaIngreso.data,
-            fechaSalida = '09/10/2022',
+            ##fechaSalida = form.fechaIngreso.data,
             idEmpleado = form.numDocId.data
         )
 
@@ -163,7 +172,8 @@ def agregar():
         db.session.add(nuevoUsuario)
         db.session.commit()
         return redirect(url_for('agregar'))
-    return render_template('CrearEmpleado.html', form=form, name=current_user.nombre)
+    return render_template('CrearEmpleado.html', form=form, name=current_user.nombre,cargos1=cargos )
+
 
 @app.route("/buscar", methods=["GET", "POST"])
 @login_required
@@ -197,7 +207,127 @@ def delete(id):
 @app.route("/editar", methods=["GET", "POST"])
 @login_required
 def actualizar():
-    return render_template("editarEmpleado.html", name=current_user.nombre)
+    idForm=request.form.get("idEmp")
+    print('El numero es', idForm) 
+    if idForm: 
+       result=db.session.query(Empleado,Contrato, Usuario).\
+       outerjoin(Contrato).\
+       outerjoin(Usuario).\
+       filter(Empleado.id==idForm )
+       print (type(result))
+            
+       
+       for  result2,result3, result4 in result:
+          
+          Empleado.idCargo=result2.idCargo
+          Empleado.nombre= result2.nombre
+          Empleado.apellido= result2.apellido.strip()
+          Empleado.direccion= result2.direccion
+          Empleado.fechaNac=result2.fechaNac
+          Empleado.correo= result2.correo
+          Empleado.genero= result2.genero
+          
+          if result4:
+             Usuario.nombre=result4.nombre
+             Usuario.clave=result4.clave
+             Usuario.idRol=result4.idRol
+          else:
+              Usuario.nombre=""
+              Usuario.clave=""
+              Usuario.idRol=""
+
+          if result3:
+            Contrato.tipoContrato=result3.tipoContrato.strip()
+            Contrato.estado=result3.estado.strip()
+            Contrato.fechaIngreso=result3.fechaIngreso.strip()
+            Contrato.fechaSalida=result3.fechaSalida.strip()
+          else:
+            Contrato.tipoContrato=""
+            Contrato.estado=""
+            Contrato.fechaIngreso='mm/dd/aaaa '
+            Contrato.fechaSalida='mm/dd/aaaa '
+
+          if  Usuario.idRol==1:
+              Rol.nombre='Usuario'
+          elif  Usuario.idRol==2:
+              Rol.nombre='Administrador'
+          elif   Usuario.idRol==3:
+               Rol.nombre='SuperAdministrador'
+          else:
+              Rol.nombre=""
+
+          cargo=db.session.query(Cargo).\
+          outerjoin(Empleado).\
+          filter(and_(Empleado.id==idForm, Cargo.id==Empleado.idCargo)).first()  
+         
+       cargos=db.session.query(Cargo).filter( Cargo.id!=Empleado.idCargo).all()
+        
+       return render_template("editarEmpleado.html",  cargos1=cargos, cargoId=cargo.id, cargoNom=cargo.nombre,cSalario=cargo.salario, eNombre=Empleado.nombre, 
+                    eApellido=Empleado.apellido, eDireccion=Empleado.direccion,fNac=Empleado.fechaNac,eCorreo=Empleado.correo,
+                    eGenero= Empleado.genero.strip(), cTipoContrato=Contrato.tipoContrato, cEstado=Contrato.estado,
+                    fechaIngreso=Contrato.fechaIngreso, fechaSalida=Contrato.fechaSalida, nomUsu=Usuario.nombre, claveUsu=Usuario.clave,
+                    uRol=Usuario.idRol, p=['Indefinido', 'Temporal', 'Otro'], nomRol=Rol.nombre, roles=enumerate(['Usuario', 'Administrador', 'SuperAdministrador']), docNum=idForm, gen=['Masculino', 'Femenino'],
+                    est=['Activo','Inactivo'],name=current_user.nombre)
+    else:
+      return render_template("editarEmpleado.html", name=current_user.nombre)
+
+
+@app.route("/actualizarEmp", methods=["GET", "POST"])
+@login_required
+def actualizarEmpleado():
+    claveAnt=request.form.get("claveOld")
+    claveNew=request.form.get("clave")
+    cargoAntiguo=request.form.get("cargOld")
+    rolAntiguo=request.form.get("rolOld")
+    idEmp=request.form.get("doc")
+    print('la clave',claveAnt, claveNew)
+    nombreEmp=request.form.get("nombre")
+    apellidoEmp=request.form.get("apellidos")
+    direccionEmp=request.form.get("direccion")
+    fechaNacEmp=request.form.get("fecha_nac")
+    correoEmp=request.form.get("correo")
+    generoEmp=request.form.get("genero")
+    rolEmp=request.form.get("rol")
+    usuEmp=request.form.get("usuario")
+
+    
+    if (request.form.get("claveOld") == request.form.get("clave")):
+          claveEmp=request.form.get("claveOld")
+          
+    else:
+        claveEmp=generate_password_hash(request.form.get("clave"), method='sha256') 
+        print('se cambió',claveEmp,request.form.get("clave"))
+
+
+    fechIngEmp=request.form.get('fecha_ingreso')
+    estadoCon=request.form.get("estado")
+    contratoEmp=request.form.get("tipo_contrato")
+    fechSalEmp=request.form.get("fecha_salida")
+    idCargoEmp=request.form.get("cargo")
+    cargoSalario=request.form.get("salario")
+    cargo=db.session.query(Cargo).filter( Cargo.id==idCargoEmp).first()
+    sqlContrato = "update Contrato set tipoContrato ='"+ str(contratoEmp) +"', estado ='" + str(estadoCon) + "', fechaIngreso ='"+ str(fechIngEmp) +"', fechaSalida ='"+  str(fechSalEmp) +"' where exists (SELECT id FROM Empleado WHERE Empleado.id = " + idEmp + " AND Contrato.idEmpleado=" + idEmp + ");"
+    db.engine.execute(sqlContrato) 
+
+
+
+    sqlUsuario = "update Usuario set nombre = '"+ str(usuEmp) +"', clave ='"+ str(claveEmp) +"',idRol = '"+ str(rolEmp) +"""
+    'where exists (SELECT id FROM Empleado  WHERE Empleado.id = '"""+ idEmp +"' AND Usuario.idEmpleado="+ idEmp +""") AND 
+    (SELECT id FROM Rol WHERE Rol.id = """+ str(rolAntiguo) +" AND Usuario.idRol = "+ str(rolAntiguo) +");"
+    db.engine.execute(sqlUsuario) 
+
+    sqlEmpleado = "update Empleado set nombre = '"+ nombreEmp +"', apellido = '"+ apellidoEmp +"""', 
+    direccion = '"""+direccionEmp+"', fechaNac='"+fechaNacEmp+"',correo = '"+correoEmp+"""', 
+    genero='"""+ generoEmp +"', idCargo="+ str(idCargoEmp) +""" where exists (SELECT id FROM Cargo 
+    WHERE Empleado.id = """+ str(idEmp) +" AND Cargo.id = "+ str(cargoAntiguo) +" AND Empleado.idCargo = "+ str( cargoAntiguo) +");"""
+    db.engine.execute(sqlEmpleado)
+    
+    sqlCargo = "update Cargo set nombre = '" + cargo.nombre + "', salario = "+ str(cargoSalario) +"""   
+    where exists (SELECT id FROM Dependencia WHERE Dependencia.id = """+ str(cargo.idDependencia) +""" AND 
+    Cargo.idDependencia="""+ str(cargo.idDependencia) +");"""
+    db.engine.execute(sqlCargo) 
+     
+    return render_template("editarEmpleado.html",  name=current_user.nombre)
 
 @app.route("/eliminar", methods=["GET", "POST"])
 @login_required

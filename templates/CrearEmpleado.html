@@ -107,17 +107,19 @@
                         </div>
                     </div>
                     
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                        <div class="form-group">
-                            <label for="fecha_salida">Fecha salida</label>
-                            {{form.fechaSalida(class_="form-control",minlength=8) }}
-                        </div>
-                    </div>
+                   
                     
-                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                     <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                         <div class="form-group" id="obj2">
                             <label for="cargo">Cargo</label>
-                            {{form.cargo(class_="form-control") }}
+                            <select name="cargo" class="form-control" id="contrato" onchange="pagolselect()">
+                                 <option >Seleccione una opción</option>
+                                {% for i in cargos1 %}
+                                    {% if i.nombre != cNombre %}
+                                       <option value="{{ i.id }}">{{ i.nombre }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
 
